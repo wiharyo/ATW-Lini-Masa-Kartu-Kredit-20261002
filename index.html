@@ -15,7 +15,7 @@
 :root[data-theme="light"]{--bg:#f4efe3;--bg2:#ebe4d2;--panel:#fffaf0;--ink:#1b2236;--soft:#5d6578;--line:#d3c9b0;--gold:#a97a1c}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,sans-serif;line-height:1.5}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,sans-serif;line-height:1.5;overflow-x:hidden}
 .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
 .hero{max-width:1100px;margin:0 auto;padding:2.8rem 1.4rem 1.2rem;display:grid;grid-template-columns:1.2fr 1fr;gap:2rem;align-items:center}
 .hero h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1;margin:.3rem 0 .8rem;font-weight:800;letter-spacing:-.03em}
@@ -33,7 +33,16 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Bricolage Grote
 .st b{display:block;font-size:1.7rem;font-weight:800;color:var(--gold);line-height:1.1}
 .st span{font-size:.82rem;color:var(--soft)}
 .hint{max-width:1100px;margin:0 auto;padding:0 1.4rem .6rem;font-size:.85rem;color:var(--soft)}
-.track{position:relative;overflow-x:auto;scroll-snap-type:x proximity;padding:1.2rem 1.4rem 2rem;display:flex;gap:1.1rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg2)}
+
+/* Carousel Styles */
+.carousel-wrap{position:relative;max-width:1100px;margin:0 auto;}
+.track{position:relative;overflow-x:auto;scroll-snap-type:x proximity;padding:1.2rem 1.4rem 2rem;display:flex;gap:1.1rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg2);scrollbar-width:none;-ms-overflow-style:none;scroll-behavior:smooth;}
+.track::-webkit-scrollbar{display:none;}
+.nav-btn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:var(--panel);border:1px solid var(--line);color:var(--ink);font-size:1.2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:transform 0.2s,background 0.2s;outline:none;}
+.nav-btn:hover{transform:translateY(-50%) scale(1.05);background:var(--bg);}
+.nav-btn.prev{left:0.5rem;}
+.nav-btn.next{right:0.5rem;}
+
 .era{flex:0 0 min(84vw,340px);scroll-snap-align:start;position:relative;padding-top:2.6rem}
 .era::before{content:"";position:absolute;left:-1.1rem;right:0;top:.55rem;height:2px;background:var(--line)}
 .era:first-child::before{left:0}
@@ -46,14 +55,32 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Bricolage Grote
 .box small{display:block;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--c);margin-bottom:.3rem;font-weight:600}
 .box p{margin:0;font-size:.92rem;color:var(--soft)}
 .foot{max-width:1100px;margin:1.2rem auto 3rem;padding:0 1.4rem;font-size:.82rem;color:var(--soft)}
-@media(max-width:720px){.hero{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.hero{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.nav-btn{display:none;}} /* Hide arrows on mobile */
+
+.src{max-width:1100px;margin:1.4rem auto 3rem;padding:0 1.4rem}
+.src-in{display:flex;gap:1.2rem;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:1rem 1.2rem}
+.qr{flex:0 0 auto;width:112px;height:112px;background:#fff;border-radius:10px;padding:6px;line-height:0}
+.qr svg{width:100%;height:100%;display:block}
+.src-t{font-size:.86rem;color:var(--soft);min-width:0}
+.src-t .kick{margin-bottom:.35rem}
+.src-t strong{display:block;color:var(--ink);font-size:1rem;line-height:1.25;margin-bottom:.35rem}
+.src-t a{color:var(--gold);text-decoration:none;word-break:break-all}
+.src-t a:hover{text-decoration:underline}
+.src-t div{margin-top:.15rem}
+@media(max-width:480px){.src-in{flex-direction:column;align-items:flex-start}}
 </style></head><body>
 <header class="hero"><div><div class="kick mono">Infografis Sejarah Kartu Kredit</div><h1>Dari Karton ke <em>Plastik</em></h1><p>Berawal dari dompet yang tertinggal</p></div>
 <div class="cc" aria-hidden="true"><div class="chip"></div><div class="tag">1950 → 1991</div><div class="no mono">4000 1950 1958 1991</div><div class="nm mono">BELI SEKARANG, BAYAR NANTI</div></div></header>
 <section class="stats"><div class="st"><b>42.000</b><span>pengguna Diners Club dalam setahun</span></div><div class="st"><b>60.000</b><span>kartu dikirim tanpa diminta ke Fresno</span></div><div class="st"><b>5–7%</b><span>biaya pemrosesan untuk restoran</span></div><div class="st"><b>1974</b><span>UU kredit setara tanpa diskriminasi</span></div></section>
-<div class="hint">Geser ke kanan untuk menelusuri lini masa →</div>
-<div class="track" id="t"></div>
-<div class="foot">Sumber: “The Rise of Plastic: A History of Credit Cards”, History Facts (Anne T. Donahue, 25 September 2026).</div>
+<div class="hint">Geser atau gunakan panah navigasi untuk menelusuri lini masa →</div>
+
+<div class="carousel-wrap">
+  <button class="nav-btn prev" aria-label="Sebelumnya">❮</button>
+  <div class="track" id="t"></div>
+  <button class="nav-btn next" aria-label="Selanjutnya">❯</button>
+</div>
+
+<footer class="src"><div class="src-in"><div class="qr"><svg role="img" aria-label="QR code menuju artikel sumber" xmlns="http://www.w3.org/2000/svg" width="180" height="180" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h45v45h-45z"/><path class="qrline" stroke="#111" d="M2 2.5h7m2 0h1m1 0h1m1 0h1m2 0h1m4 0h2m2 0h2m2 0h1m4 0h7m-41 1h1m5 0h1m1 0h2m1 0h1m1 0h3m1 0h1m2 0h1m5 0h1m5 0h1m1 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m1 0h5m2 0h8m4 0h2m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h1m1 0h1m2 0h1m2 0h4m3 0h4m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m1 0h8m2 0h1m1 0h5m1 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m3 0h4m2 0h1m3 0h1m1 0h1m1 0h2m4 0h1m3 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-33 1h1m3 0h1m2 0h1m3 0h2m6 0h1m2 0h3m-33 1h1m5 0h1m1 0h1m1 0h3m2 0h1m1 0h3m2 0h1m2 0h5m1 0h1m1 0h2m2 0h3m-38 1h1m1 0h2m2 0h2m1 0h1m3 0h1m2 0h2m1 0h1m1 0h1m1 0h1m1 0h1m2 0h2m4 0h1m-35 1h1m2 0h2m1 0h3m1 0h1m2 0h2m3 0h2m5 0h2m3 0h2m1 0h2m-36 1h1m3 0h1m1 0h2m1 0h1m1 0h1m2 0h2m1 0h3m1 0h3m1 0h3m1 0h3m1 0h4m1 0h2m-41 1h3m1 0h3m2 0h2m1 0h1m1 0h3m6 0h2m1 0h1m1 0h1m5 0h2m-36 1h1m1 0h1m8 0h1m1 0h2m1 0h1m1 0h1m2 0h1m3 0h1m1 0h2m2 0h2m1 0h3m1 0h3m-41 1h3m1 0h1m1 0h4m1 0h8m1 0h2m1 0h2m2 0h1m2 0h1m1 0h2m1 0h1m1 0h1m-35 1h3m2 0h2m1 0h1m6 0h1m1 0h1m1 0h2m3 0h2m1 0h1m1 0h2m2 0h5m-40 1h1m1 0h6m3 0h4m1 0h1m4 0h8m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m-41 1h2m1 0h1m5 0h1m1 0h2m1 0h2m3 0h3m1 0h2m2 0h5m1 0h4m3 0h1m-41 1h1m1 0h5m1 0h1m6 0h6m2 0h1m2 0h2m1 0h1m1 0h2m1 0h4m2 0h1m-41 1h1m1 0h1m2 0h1m1 0h2m1 0h1m1 0h2m1 0h1m4 0h2m2 0h1m1 0h2m3 0h3m2 0h2m1 0h2m-41 1h1m1 0h1m1 0h1m1 0h1m1 0h2m2 0h1m5 0h1m2 0h2m2 0h1m1 0h3m3 0h1m1 0h1m2 0h2m-39 1h2m1 0h2m5 0h3m2 0h2m1 0h2m1 0h2m1 0h3m1 0h3m3 0h4m-37 1h1m1 0h3m2 0h1m3 0h3m1 0h1m2 0h1m3 0h1m2 0h1m2 0h1m1 0h1m1 0h2m2 0h1m-39 1h1m2 0h1m1 0h1m4 0h1m4 0h1m4 0h1m1 0h3m1 0h1m1 0h1m4 0h1m2 0h1m-36 1h1m1 0h2m1 0h2m2 0h3m2 0h2m2 0h2m1 0h3m2 0h2m3 0h1m1 0h2m1 0h1m1 0h2m-41 1h2m1 0h1m3 0h1m3 0h1m5 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h1m2 0h4m2 0h1m-39 1h1m2 0h6m1 0h2m1 0h1m2 0h1m1 0h1m4 0h3m4 0h1m2 0h1m-32 1h2m3 0h5m1 0h2m1 0h3m3 0h1m6 0h1m1 0h2m1 0h5m-41 1h2m4 0h2m3 0h1m1 0h1m1 0h3m4 0h1m1 0h6m1 0h1m5 0h2m1 0h1m-41 1h1m1 0h4m3 0h5m2 0h3m1 0h2m2 0h1m2 0h3m1 0h2m1 0h4m2 0h1m-41 1h2m2 0h1m1 0h1m3 0h1m1 0h3m1 0h3m1 0h5m1 0h2m1 0h1m1 0h3m1 0h1m2 0h3m-41 1h1m1 0h2m3 0h2m3 0h4m3 0h2m1 0h1m1 0h1m1 0h1m3 0h1m1 0h1m1 0h2m1 0h1m1 0h1m-40 1h1m4 0h2m1 0h1m1 0h1m1 0h1m1 0h1m1 0h5m1 0h1m1 0h2m1 0h3m2 0h5m1 0h1m-31 1h1m4 0h1m1 0h5m3 0h1m1 0h3m2 0h1m1 0h1m3 0h1m-37 1h7m2 0h1m1 0h4m1 0h2m2 0h2m3 0h8m1 0h1m1 0h2m-38 1h1m5 0h1m4 0h2m4 0h3m2 0h1m3 0h1m4 0h2m3 0h2m1 0h2m-41 1h1m1 0h3m1 0h1m2 0h3m2 0h4m1 0h4m2 0h3m3 0h6m2 0h2m-41 1h1m1 0h3m1 0h1m2 0h2m1 0h3m1 0h8m3 0h2m1 0h3m2 0h1m1 0h2m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h2m2 0h1m6 0h1m2 0h13m-38 1h1m5 0h1m3 0h5m2 0h1m4 0h1m1 0h1m1 0h3m4 0h1m2 0h3m1 0h1m-41 1h7m1 0h5m4 0h3m2 0h1m1 0h6m1 0h1m3 0h2m1 0h1"/></g></svg></div><div class="src-t"><div class="kick mono">Sumber</div><strong>“The Rise of Plastic: A History of Credit Cards”</strong><div>Penulis: Anne T. Donahue</div><div>Situs: History Facts (historyfacts.com)</div><div>Terbit: 25 September 2026</div><div><a href="https://historyfacts.com/science-industry/article/the-rise-of-plastic-a-history-of-credit-cards/" target="_blank" rel="noopener">historyfacts.com/science-industry/article/the-rise-of-plastic-a-history-of-credit-cards/</a></div><div>Pindai QR untuk membaca artikel aslinya.</div></div></div></footer>
 <script>
 var D=[
 ["#d9a86c","linear-gradient(135deg,#d8c299,#a98a5a)","Diners Club","1950","Karton","Diners Club menjadi kartu tagih modern pertama: pelanggan makan di berbagai restoran dan melunasi tagihan di akhir bulan. Idenya lahir pada 1949, saat Frank McNamara lupa membawa dompet.","Kartunya kecil dan dari karton. Dalam setahun, penggunanya sekitar 42.000 orang di seluruh Amerika."],
@@ -67,4 +94,29 @@ document.getElementById("t").innerHTML=D.map(function(d,i){
 return '<article class="era" style="--c:'+d[0]+';--g:'+d[1]+'"><div class="yr mono">'+d[3]+'</div><h2>'+d[2]+'</h2>'
 +'<div class="box"><p>'+d[5]+' '+d[6]+'</p></div>'
 +'<div class="cc" aria-hidden="true"><div class="chip"></div><div class="tag mono">'+d[4]+'</div><div class="no mono">•••• •••• •••• 0'+(i+1)+'</div></div></article>'}).join("");
+
+// Carousel Logic
+var track = document.getElementById('t');
+var btnPrev = document.querySelector('.prev');
+var btnNext = document.querySelector('.next');
+
+var scrollAmt = 360; // Ukuran scroll kurang lebih sama dengan lebar satu kartu
+
+btnNext.addEventListener('click', function(){
+  track.scrollBy({ left: scrollAmt, behavior: 'smooth' });
+});
+btnPrev.addEventListener('click', function(){
+  track.scrollBy({ left: -scrollAmt, behavior: 'smooth' });
+});
+
+// Sembunyikan panah jika mentok
+track.addEventListener('scroll', function(){
+  btnPrev.style.opacity = track.scrollLeft <= 0 ? '0.3' : '1';
+  btnPrev.style.pointerEvents = track.scrollLeft <= 0 ? 'none' : 'auto';
+  
+  btnNext.style.opacity = track.scrollLeft >= (track.scrollWidth - track.clientWidth - 10) ? '0.3' : '1';
+  btnNext.style.pointerEvents = track.scrollLeft >= (track.scrollWidth - track.clientWidth - 10) ? 'none' : 'auto';
+});
+// Cek status saat pertama kali load
+setTimeout(function() { track.dispatchEvent(new Event('scroll')); }, 100);
 </script></body></html>
